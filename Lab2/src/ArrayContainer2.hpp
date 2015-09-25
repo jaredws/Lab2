@@ -12,26 +12,27 @@
 template<class T> class ArrayContainer2:public Container<T>
 {
 private:
-	int*AP;
+	T*array;
 	int s;//the original size
 	int CurrentSize;//modified by insert, remove, and clear
-	int* CP;
+	int CP;
 
 public:
 	ArrayContainer2(int size=DEFAULT_SIZE){
 		this->s=size;
-		int array[size];
-		this->AP=&array[0];
+		array = new T[size];
 		this->CurrentSize = 0;
-		this->CP=NULL;
+		this->CP=0;
 	}
 	~ArrayContainer2(){
-		delete AP;
-		delete CP;
+		delete[] array;
+		CP=NULL;
+		CurrentSize=NULL;
+		s=NULL;
 	}
 	void Clear(){
 		for (int i=0; i<CurrentSize; i++)
-			*(AP+i) = NULL;
+			array[i] = NULL;
 		CurrentSize = 0;
 		std:: cout << "Clear" << std:: endl;
 		//Runs through the array one by one O(n)
@@ -52,16 +53,16 @@ public:
         	//Returns value inputed, O(1)
 
         void Insert(const T& item){
-        	*(AP+CurrentSize) = item;
+        	array[CurrentSize] = item;
         	CurrentSize++;
         	//std:: cout << "Insert doing its shit." << std:: endl;
         	//Knows the index and replaces "Null" with the "inserted" value, O(1)
         }
         bool Contains(const T&  item){
         	std:: cout << "Contains" << std:: endl;
-        	for(int* q=AP; q<(AP+CurrentSize); q++){
-        		std:: cout<<*q<<std::endl;
-        		if (*(q)==item){
+        	for(int q=0; q<CurrentSize; q++){
+        		//std:: cout<<q<<std::endl;
+        		if (array[q]==item){
         			CP=q;
         			return true;
         		}
@@ -74,8 +75,8 @@ public:
         	std:: cout << "Find" << std:: endl;
         	if (Contains(item)){
         		std:: cout << "Finding and return'" << std:: endl;
-        		std:: cout<<(*AP)<<std::endl;
-        		return CP;
+        		std:: cout<<(CP)<<std::endl;
+        		return &array[CP];
         	}
         	else return NULL;
         	//Utilizes Contains() with an if else bool, O(n)
@@ -83,13 +84,12 @@ public:
 	void Remove(const T& item){
 		std:: cout << "Remove" << std:: endl;
 		int *p=Find(item);
-		for (int x = 1; x<CurrentSize-2; x++){
-			std:: cout<<(*p)<<std::endl;
-			*(p+x-1) = *(p+x);
+		for (int x = 0; x<CurrentSize-2-CP; x++){
+			std:: cout<<(p)<<std::endl;
+			array[CP+x] = array[CP+x+1];
 		}
-		*(AP+CurrentSize-1) = NULL;
 		CurrentSize--;
-		std:: cout << *(p) << std:: endl;
+		std:: cout << Contains(item) << std:: endl;
 
 
 		//Sets the value before equal to the one after shifting the array back, O(n)
