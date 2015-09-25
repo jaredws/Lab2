@@ -1,7 +1,6 @@
 #ifndef __ARRAYCONTAINER_H__
 #define __ARRAYCONTAINER_H__
 #include <iostream>
-#include <typeinfo>//NOTE MAIN HAS BEEN ADJUSTED TO WORK WITH ARRAYCONTAINER2!!!!!
 
 #define DEFAULT_SIZE 50
 
@@ -13,22 +12,22 @@ template<class T> class ArrayContainer2:public Container<T>
 {
 private:
 	T*array;
-	int s;
+	int max;
 	int CurrentSize;
-	int CP;//For large n this save a lot of time parsing through since you don't need to have another for loop (therefore saving O(n))
+	int storedIndex;//For large n this save a lot of time parsing through since you don't need to have another for loop (therefore saving O(n))
 
 public:
 	ArrayContainer2(int size=DEFAULT_SIZE){
-		this->s=size;
+		max=size;
 		array = new T[size];
-		this->CurrentSize = 0;
-		this->CP=0;
+		CurrentSize = 0;
+		storedIndex=0;
 	}
 	~ArrayContainer2(){
 		delete[] array;
-		CP=NULL;
+		storedIndex=NULL;
 		CurrentSize=NULL;
-		s=NULL;
+		max=NULL;
 	}
 	void Clear(){
 		for (int i=0; i<CurrentSize; i++)
@@ -47,7 +46,7 @@ public:
 		//Boolean evaluation, O(1)
 	}
 
-	int MaxSize(){return s;}
+	int MaxSize(){return max;}
 		//Returns value inputed, O(1)
 
 	void Insert(const T& item){
@@ -58,7 +57,7 @@ public:
 	bool Contains(const T&  item){
 		for(int q=0; q<CurrentSize; q++){
 			if (array[q]==item){
-				CP=q;
+				storedIndex=q;
 				return true;
 			}
 		}
@@ -68,15 +67,15 @@ public:
 
 	T* Find(const T& item){
 		if (Contains(item)){
-			return &array[CP];
+			return &array[storedIndex];
 		}
 		else return NULL;
 		//Utilizes Contains() with an if else bool, O(n)
 	}
 	void Remove(const T& item){
 		int *p=Find(item);
-		for (int x = 0; x<CurrentSize-2-CP; x++){
-			array[CP+x] = array[CP+x+1];
+		for (int x = 0; x<CurrentSize-2-storedIndex; x++){
+			array[storedIndex+x] = array[storedIndex+x+1];
 		}
 		CurrentSize--;
 		//Sets the value before equal to the one after shifting the array back, O(n)
