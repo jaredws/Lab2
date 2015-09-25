@@ -1,5 +1,6 @@
 #ifndef __ARRAYCONTAINER_H__
 #define __ARRAYCONTAINER_H__
+#include "Container.h"
 #include <iostream>
 
 #define DEFAULT_SIZE 50
@@ -8,7 +9,7 @@
 // Steven Sell
 // Jared Sharpe
 
-template<class T> class ArrayContainer2:public Container<T>
+template<class T> class ArrayContainer:public Container<T>
 {
 private:
 	T*array;
@@ -17,13 +18,13 @@ private:
 	int storedIndex;//For large n this save a lot of time parsing through since you don't need to have another for loop (therefore saving O(n))
 
 public:
-	ArrayContainer2(int size=DEFAULT_SIZE){
+	ArrayContainer(int size=DEFAULT_SIZE){
 		max=size;
 		array = new T[size];
 		CurrentSize = 0;
 		storedIndex=0;
 	}
-	~ArrayContainer2(){
+	~ArrayContainer(){
 		delete[] array;
 		storedIndex=NULL;
 		CurrentSize=NULL;

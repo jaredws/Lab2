@@ -1,6 +1,7 @@
 #include <iostream>
+
+#include "ArrayContainer.hpp"
 #include "Container.h"
-#include "ArrayContainer2.hpp"
 
 using namespace std;
 
@@ -19,7 +20,7 @@ int main(int argc,char** argv)
 
 void RunOfSize(int size)
 {
-	Container<int>* dataContainer=new ArrayContainer2<int>(size);
+	Container<int>* dataContainer=new ArrayContainer<int>(size);
 	for (int i=0;i<size;i++) {
 		dataContainer->Insert(i);
 	}
